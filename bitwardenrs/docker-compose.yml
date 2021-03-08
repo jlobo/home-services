@@ -24,7 +24,7 @@ services:
 # https://medium.com/faun/set-current-host-user-for-docker-container-4e521cef9ffc
 
   bitwarden:
-    image: bitwardenrs/server
+    image: bitwardenrs/server:1.19.0
     restart: unless-stopped
     expose:
       - '80'
