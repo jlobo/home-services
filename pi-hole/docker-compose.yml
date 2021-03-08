@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    hostname: pihole
+    domainname: lan     
+    ports:
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '67:67/udp'
+      - '80:80/tcp'
+      - '443:443/tcp'
+    environment:
+      TZ: 'Australia/Brisbane'
+      WEBPASSWORD: '$WEBPASSWORD' # Put a strong password here.
+      ServerIP: 192.168.110.201       # <-- match ipv4_address
+      VIRTUAL_HOST: pihole.lan        # <-- match hostname + domainname
+      PIHOLE_DNS_: 1.1.1.1;1.0.0.1
+    dns:
+      - 1.1.1.1
+      - 127.0.0.1
+    # We'll use host networking simply because it is way easier to setup.
+    #network_mode: host
+    
+    # Volumes store your data between container upgrades
+    volumes:
+      - '/media/pihole/etc-pihole/:/etc/pihole/'
+      - '/media/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    
+    # Required for the DHCP server
+    cap_add:
+      - NET_ADMIN
+    #restart: always
+    restart: unless-stopped
